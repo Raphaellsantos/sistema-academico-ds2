@@ -6,44 +6,255 @@
 body {
 
     margin: 0;
-
     min-height: 100vh;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
     font-family: Verdana, sans-serif;
-
     background-color: #f4f6f8;
     color: #1f2937;
 
-
 }
 
-main{
+/* 
+*limitando e centralizando o conteudo 
+*/
 
-    width: min (90%, 700px);
+.container {
+    width: min(92%, 1100px);
+    margin: 0 auto;
+}
 
-    padding: 32px;
+/* 
+*cabeçalho da aplicação
+*/
 
+.cabeçalho {
+    padding: 28px 0;
+    background-color: #1f2937;
+    color: aliceblue;
+}
+
+.cabeçalho h1 {
+    margin: 0;
+}
+
+.cabeçalho p {
+    margin: 8px 0 0;
+}
+
+/* 
+*adiciona espaço acima e abaixo do conteúdo principal
+*/
+
+main.container {
+    padding: 32px 0;
+}
+
+/* 
+*cada cartão representa uma seção visual
+*/
+
+.cartao {
+
+    margin-bottom: 24px;
+    padding: 24px;
     border-radius: 8px;
-
     background-color: #ffffff;
-
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-
-
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 
 }
 
-h1{
+.cartao h2 {
+    margin-top: 0px;
+    color: #1f2937;
+}
 
-    margin-top: 0;
+/* 
+*Organizando formulário em colunas flexíveis
+*/
 
-    color: #0f3d66;
+.grade-formulario {
+    display: grid;
 
+    /* 
+    *cria colunas com largura minima de 220px
+    */
+
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(220px, 1fr)
+        );
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* 
+*Organiza o label e input verticalmente
+*/
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo label {
+    font-weight: bold;
+}
+
+/* 
+* Aparência do campo de entrada.
+*/
+
+
+.campo input {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font: inherit;
+}
+
+/* 
+*destaque do campo do foco
+*/
+
+.campo input:focus {
+    border-color: #0f3d66;
+    outline: 3px solid rgba(15, 61, 102, 0.15);
+}
+
+/* 
+*Botão principal do formulário
+*/
+
+button {
+    padding: 12px 20px;
+    border: 0;
+    border-radius: 6px;
+    background-color: #0f3d66;
+    color: #ffffff;
+    font: inherit;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 
+*Altera a cor quando o ponteiro está sobre o botão.
+*/
+
+button:houver {
+    background-color: #5195d4;
+
+}
+
+/* 
+*Área da mensagem
+*/
+
+.mensagem {
+    min-height: 24px;
+    margin-top: 16px;
+    font-weight: bold;
+}
+
+/* 
+*mensagem de sucesso.
+*/
+
+.mensagem.sucesso {
+    color: #5bbb80;
+}
+
+/* 
+*mensagem de erro.
+*/
+
+.mensagem.erro {
+    color: #b91c1c;
+}
+
+/* 
+*Organiza o titulo e o total de alunos lado a lado
+*/
+
+.titulo.secao {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+/* 
+*Permite a rolagem horizontal em telas pequenas
+*/
+.tabela-responsiva {
+    overflow-x: auto;
+}
+
+/* 
+* Configuração da tabela
+*/
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* 
+*Configuração das células.
+*/
+
+th,
+td {
+    padding: 12px;
+    border: 1px solid #d9d9d9;
+    text-align: left;
     
+}
+
+/* 
+*Cabeçalho da tabela.
+*/
+
+th {
+    background-color: #0f3d66;
+    color: #ffffff;
+}
+
+/* 
+*Altera a cor da linha para a leitura
+*/
+
+tbody tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+/* 
+* Área para apresentação JSON.
+*/
+
+pre {
+    max-height: 350px;
+    margin: 0;
+    padding: 16px;
+    overflow: auto;
+    border-radius: 6px;
+    background-color: #111827;
+    color: #e5e7eb;
+    line-height: 1.5;
+}
+
+/* 
+*Ajuste telas pequenas
+*/
+
+@media (max-width: 600px) {
+    .cartao {
+        padding: 18px;
+    }
+
+    .titulo-secao {
+        align-items: flex-start;
+        flex-direction: column;
+    }
 }
