@@ -1,13 +1,8 @@
 /*
- * VIEW DE ALUNOS --VERSÃO COM DOM
+ * VIEW DE ALUNOS --VERSÃO 0.3
  *
- * A view é responsável por:
- * - Localizar elementos html;
- * - Ler os campos do formulário;
- * - observar o evento submit;
- * - apresentar mensagens;
- * - montar a tabela;
- * - apresentar o JSON.
+ * A view continua responsável pelo DOM e pelos eventos
+
  */
 
 const AlunoView = {
@@ -57,15 +52,21 @@ const AlunoView = {
         AlunoView.elementos.saidaJson =
             document.getElementById("saida-json");
 
+        /*
+         * Nova referência da versão 0.3
+         */
+
+        AlunoView.elementos.botaoLimpar =
+            document.getElementById("btn-limpar-dados");
     },
 
+
     /*
-     * Registra a função que será executada
-     * quando o formulário for enviado.
-     * Parâmetro aoEnviar é uma função recebida do controller.
+     * Configura o evento submit
      */
 
-    configuraFormulario(aoEnviar) {
+
+    configurarFormulario(aoEnviar) {
         AlunoView.elementos.formulario.addEventListener(
             "submit",
             function (evento) {
@@ -74,7 +75,7 @@ const AlunoView = {
                 * impede o comportamento padrão do formulário
                 * evitando o carregamento da págica
                 */
-                evento.preventDefault(); 
+                evento.preventDefault();
 
                 /*
                  * Lê os valores atuais do formulário
@@ -91,9 +92,22 @@ const AlunoView = {
         );
     },
 
+    /*
+     * Configura o evento click do botão limpar dados.
+     */
+
+    configurarBotaoLimpar(aoLimpar) {
+        AlunoView.elementos.botaoLimpar.addEventListener(
+            "click",
+            function () {
+                aoLimpar();
+            }
+        );
+    },
+
 
     /*
-    * Lê a propiedade value de cada campo.
+    * Lê os valores do formulário.
     */
 
 
@@ -106,6 +120,16 @@ const AlunoView = {
             turma: AlunoView.elementos.turma.value
 
         };
+    },
+
+    /*
+    * Solicita a confirmação antes de remover os dados.
+    */
+
+    confirmarLimpeza() {
+        return confirm(
+            "Deseja remover todos os alunos cadastrados ?"
+        );
     },
 
     /*
@@ -138,16 +162,12 @@ const AlunoView = {
 
 
     /*
-    * Limpa os campos depois do cadastro bem-sucedido.
+    * Limpa o formulário e devolve o foco ao RA
     */
 
     limparFormulario() {
         AlunoView.elementos.formulario.reset();
 
-        /*
-        * Devolve o foco ao campo RA,
-        * facilitando o proximo cadastro
-        */
 
         AlunoView.elementos.ra.focus();
 
@@ -155,15 +175,12 @@ const AlunoView = {
 
 
     /*
-    * Apresenta a lista de alunos na tabela.
+    * Reconstroi a tabela de alunos.
     */
 
     exibirLista(alunos) {
         const corpoTabela = AlunoView.elementos.corpoTabela;
 
-        /*
-        * Remove as linhas apresentada anteriormente
-        */
 
         corpoTabela.textContent = "";
 

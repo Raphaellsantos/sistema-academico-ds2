@@ -10,8 +10,13 @@
     
     <script src="./js/model/aluno-model.js" defer>
     </script>
+
+    <script src="./js/service/aluno-service.js" defer>
+    </script>
+
     <script src="./js/view/aluno-view.js" defer>
     </script>
+
     <script src="./js/controller/aluno-controller.js" defer>
     </script>
 
@@ -157,9 +162,21 @@
                     A view observará o evento no addEventListener().
                     -->
 
-                <button type="submit">
-                    Cadastrar aluno
-                </button>
+                <div class="acoes-formulario">
+                    <button type="submit"> 
+                        Cadastrar aluno
+                    </button>
+
+                    <button
+                    type="button"
+                    id="btn-limpar-dados"
+                    class="botao-secundario">
+
+                    Limpar dados
+                    </button>
+                </div>
+
+
             </form>
 
 
