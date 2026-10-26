@@ -1,166 +1,108 @@
 /*
- * MODEL ALUNOS - VERSÃO 0.3
- *
- * O model contém as regras relacionadas ao aluno.
+ * O model do frontend representa e valida os dados
+ * que serão enviados a API.
  * 
- * Ele não sabe:
- * - de onde os dados vieram
- * - como serão apresentado
- * - onde serão armazenados.
-*/
+ * A validação do frontend melhora a experiência
+ * do usuario, mas não substitui a validação realizada
+ * pelo backend.
+ */
 
 const AlunoModel = {
-
     /*
-     * converte o valor para texto
-     * e remove espaços no começo e no final
-     *
+     * Converte o valor para texto e remove
+     * espaços desnecessários do início e do final
      */
 
     normalizarTexto(valor) {
+
+        /*
+         * Se o valor não existir, retornamos
+         * uma string vazia.
+         */
         if (valor === null || valor === undefined) {
             return "";
         }
 
         return String(valor).trim();
+
     },
 
-
     /*
-     * Realiza uma validação introdutória do e-mail. 
-     *
-    */
+     * Realiza uma validação inicial do e-mail.
+     */
 
     validarEmail(email) {
         return email.includes("@") && email.includes(".");
-    },
 
-    /*
-     * Procura um aluno pelo RA dentro do array recebido,
-     * agora o trabalho da model passa para camada Service.
-    */
-
-    localizarPorRa(alunos, ra) {
-        return alunos.find(
-            aluno => aluno.ra === ra
-        );
     },
 
 
     /*
-    * Calcula o proximo identificador,
-    * se não houver alunos, o primeiro Id será 1.
-    */
-
-    gerarProximoId(alunos) {
-        if (alunos.length === 0) {
-            return 1;
-        }
-
-        /*
-         * map () cria um array contendo somente os IDs
-         *
-         * ex:  alunos = [{ id:1 }, { id:4 }]
-         * ids = [1, 4]
-         */
-
-        const ids = alunos.map(
-            aluno => aluno.id
-        );
-
-        /*
-         * Math.max() encontra o maior ID.
-         *
-         * O operador spreed (...) entrega cada
-         * numero do array com argumento
-         */
-
-        const maiorId = Math.max(...ids);
-
-        return maiorId + 1;
-    },
-
-
-    /*
-     * Valida os dados e cria um novo objeto aluno.
-     *
-     * Model não salva objeto e devolve para camada Service.
+     * Normaliza e valida os dados informados
+     * no formulário.
      */
 
-    criar(dados, alunos) {
-        const ra = AlunoModel.normalizarTexto(dados.ra);
-        const nome = AlunoModel.normalizarTexto(dados.nome);
-        const email = AlunoModel.normalizarTexto(dados.email);
-        const curso = AlunoModel.normalizarTexto(dados.curso);
-        const turma = AlunoModel.normalizarTexto(dados.turma);
-
+    validar(dados) {
 
         /*
-         * Verifica os campos obrigatórios
-         */
-
-
-        if (
-            ra === "" ||
-            nome === "" ||
-            email === "" ||
-            curso === "" ||
-            turma === ""
-        ) {
-            return {
-                sucesso: false,
-                mensagem: "Todos os campos são obrigatórios"
-            };
-        }
-
-        /*
-         * Verifica o formato básico do e-mail
-         */
-
-
-        if (!AlunoModel.validarEmail(email)) {
-            return {
-                sucesso: false,
-                mensagem: "Informa um e-mail valido"
-            };
-        }
-
-        /*
-         * Verifica se o Ra já existe na lista recebida.
-         */
-
-        if (AlunoModel.localizarPorRa(alunos, ra)) {
-            return {
-                sucesso: false,
-                mensagem: "Já existe um aluno com esse RA."
-            };
-        }
-
-        /*
-         * Cria um objeto depois que todas as validações
-         * foram aprovadas.
+         * Cria um novo objeto com 
+         * os valores normalizados
          */
 
         const aluno = {
-            id: AlunoModel.gerarProximoId(alunos),
-            ra: ra,
-            nome: nome,
-            email: email,
-            curso: curso,
-            turma: turma,
-            ativo: true
+            ra: AlunoModel.normalizarTexto(dados.ra),
+            nome: AlunoModel.normalizarTexto(dados.nome),
+
+            /*
+             * O e-mail também será convertido
+             * para letras minúsculas.
+             */
+
+            email: AlunoModel
+                .normalizarTexto(dados.email)
+                .toLowerCase(),
+
+            curso: AlunoModel.normalizarTexto(dados.curso),
+            turma: AlunoModel.normalizarTexto(dados.turma)
         };
 
         /*
-         * Devolve para a camada Service
-         * Model não utiliza push() nem LocalStorage.
+         * Verifica se todos os campos foram preenchidos. 
+         */
+
+        if (
+            aluno.ra === "" ||
+            aluno.nome === "" ||
+            aluno.email === "" ||
+            aluno.curso === "" ||
+            aluno.turma === ""
+        ) {
+            return {
+                sucesso: false,
+                mensagem: "Todos os campos são obrigatórios."
+            };
+        }
+
+        /*
+         * Verifica o formato inicial do e-mail.
+         */
+
+        if (!AlunoModel.validarEmail(aluno.email)) {
+            return {
+                sucesso: false,
+                mensagem: "Informe um e-mail válido."
+            };
+        }
+
+        /*
+         * Se os dados forem válidos, devolvemos
+         * o objeto preparado para ser enviado à API.
          */
 
         return {
             sucesso: true,
-            aluno: aluno
+            dados: aluno
         };
-
     }
 
 };

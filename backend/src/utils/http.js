@@ -9,9 +9,9 @@
 */
 
 const cabecalhosCors = {
-    "Acess-Control-Allow-Origin": "*",
-    "Acess-Control-Allow-Methods": "GET, POST, OPTION",
-    "Acess-Control-Allow-Headers": "Content-type"
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-type"
 };
 
 /*

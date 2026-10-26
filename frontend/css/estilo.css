@@ -78,10 +78,8 @@ main.container {
     *cria colunas com largura minima de 220px
     */
 
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(220px, 1fr)
-        );
+    grid-template-columns: repeat(auto-fit,
+            minmax(220px, 1fr));
     gap: 16px;
     margin-bottom: 20px;
 }
@@ -209,7 +207,7 @@ td {
     padding: 12px;
     border: 1px solid #d9d9d9;
     text-align: left;
-    
+
 }
 
 /* 
@@ -280,3 +278,42 @@ pre {
 .botao-secundario:houver {
     background-color: #475569;
 }
+
+
+/* 
+ * Aparência do botão enquanto uma requisição
+ * estiver sendo processada. 
+ */
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/*
+ * Mensagem informativa utilizada durante
+ * o carregamento ou envio de dados.
+ */
+
+.mensagem.informacao {
+    color: #1d4ed8;
+}
+
+/*
+ * Mensagem apresentadas em 
+ * operações concluídas.
+ */
+.mensagem.sucesso {
+    color: #15803d;
+}
+
+/*
+ * Mensagem apresentada quando
+ * ocorre um erro.
+ */
+
+ .mensagem.erro {
+    color: #b91c1c;
+ }
+
+ 
