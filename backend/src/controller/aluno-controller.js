@@ -5,38 +5,23 @@
 
 import AlunoModel from "../model/aluno-model.js";
 
-
 /*
- * Importa as funções utilizadas para trabalhar
- * com requisições e respostas HTTP.
+ * O Controller recebe as requisições encaminhadas
+ * pelo Router, chama o Model e produz a resposta.
  */
 
-import {
-    enviarJson,
-    lerCorpoJson
-} from "../utils/http.js";
-
-/*
- * O controller recebe as solicitações encaminhadas
- * pelas rotas e coordena a execução da aplicação.
- * 
- * Ele faz a ligação entre:
- * -requisições HTTP;
- * -model;
- * -resposta JSON.
- */
 
 const AlunoController = {
     /*
      * Lista todos os alunos cadastrados.
      * 
-     * Essa função será executada quando o servidor
-     * receber GET / api/alunos.
+     * Endpoint:
+     * GET / api/alunos.
      */
     listar(req, res) {
 
         /*
-         * Solicita os dados da Model
+         * Solicita a lista ao Model
          */
 
         const alunos = AlunoModel.listar();
@@ -47,83 +32,66 @@ const AlunoController = {
          * O status 200 significa que a requisição
          * foi processada com sucesso.
          */
-        enviarJson(res, 200, {
+        return res.status(200).json({
             total: alunos.length,
             dados: alunos
         });
+
     },
 
 
     /*
      * Cadastra um novo aluno.
      * 
-     * async indica que a função possui uma
-     * operação assíncrona.
+     * Endpoint:
+     * POST /api/alunos
      */
 
-    async cadastrar(req, res) {
-        try {
-            /*
-             * Aguarda a leitura e a conversão
-             * do JSON recebido na requisição.
-             */
-            const dados = await lerCorpoJson(req);
+    cadastrar(req, res) {
 
-            /*
-             * Encaminha os dados para o Model.
-             */
-            const resultado = AlunoModel.cadastrar(dados);
+        /*
+         * Express.json() já converteu o JSON
+         * recebido para um objeto JavaScript.
+         * 
+         * O resultado está disponivel em req.body.
+         */
 
-            /*
-             * Verifica se o Model encontrou
-             * algum problema de validação.
-             */
+        const dados = req.body;
 
-            if (!resultado.sucesso) {
-                enviarJson(res, resultado.status, {
-                    sucesso: false,
-                    mensagem: resultado.mensagem
-                });
+        /*
+         * Encaminha os dados ao Model. 
+         */
 
-                return;
+        const resultado = AlunoModel.cadastrar(dados);
 
-            }
+        /*
+         * Verifica se o Model encontrou
+         * algum problema de validação.
+         */
 
-            /*
-             * Se o cadastro foi realizado,
-             * responde com o status 201.
-             * 
-             * O status 201 significa que um novo
-             * recurso foi criado com sucesso.
-             */
-
-            enviarJson(res, resultado.status, {
-
-                sucesso: true,
-                mensagem: "Aluno cadastrado com sucesso.",
-                dados: resultado.aluno
-            });
-
-        } catch (erro) {
-
-            /*
-             * Este bloco será executado por exemplo,
-             * quando o cliente enviar um JSON inválido.
-             */
-            enviarJson(res, 400, {
+        if (!resultado.sucesso) {
+            return res.status(resultado.status).json({
                 sucesso: false,
-                mensagem: " O corpo da requisição contém um JSON inválido."
+                mensagem: resultado.mensagem
             });
-
-
         }
+
+        /*
+         * Retorna p status 201 quando o
+         * aluno é criado com sucesso.
+         */
+
+        return res.status(201).json ({
+            sucesso: true,
+            mensagem: "Aluno cadastrado com sucesso.",
+            dados: resultado.aluno
+        });
     }
 
 };
 
 /*
- * Exporta o Controller para que ele seja
- * utilizado pelo arquivo de rotas.
+ * Exporta o Controller.
  */
 
 export default AlunoController;
